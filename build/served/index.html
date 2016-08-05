@@ -1,0 +1,427 @@
+<!doctype html>
+<html ng-app="piechopper" ng-controller="AppCtrl"
+      legacy-browser-rejector browser-image-path="vendor/images/"
+      lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>PieChopper - Chop your startup equity</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="vendor/css/bootstrap-flatly.min.css" rel="stylesheet">
+    
+    <link href="vendor/css/chango.css" rel="stylesheet">
+    <link href="vendor/css/bootstrap-responsive.min.css" rel="stylesheet">
+    <link href="vendor/css/font-awesome.min.css" rel="stylesheet">
+    <link href="vendor/css/angular-ui.min.css" rel="stylesheet">
+    <link href="vendor/css/jquery.reject.css" rel="stylesheet">
+    
+    <link href="app/css/style.css?v=2016-08-5--16-46-25" rel="stylesheet">
+    <link href="app/img/favicon.ico?v=2016-08-5--16-46-25" rel="icon">
+
+    <!-- FULLSTORY SNIPPET START -->
+    <script>
+    var _e2e_sessionURL;
+
+    function loadRecordingScript(orgId) {
+      window['_fs_debug'] = false;
+      window['_fs_host']='staging.fullstory.com';
+      window['_fs_org']=orgId;
+      window['_fs_namespace'] = 'FS';
+      window['_fs_is_outer_script'] = true;
+
+      (function(m,n,e,t,l,o,g,y){
+        if (e in m && m.console && m.console.log) { m.console.log('FullStory namespace conflict. Please set window["_fs_namespace"].'); return;}
+        g=m[e]=function(a,b){g.q?g.q.push([a,b]):g._api(a,b);};g.q=[];
+        o=n.createElement(t);o.async=1;o.src='https://'+_fs_host+'/s/fs.js';
+        y=n.getElementsByTagName(t)[0];y.parentNode.insertBefore(o,y);
+        g.identify=function(i,v){g(l,{uid:i});if(v)g(l,v)};g.setUserVars=function(v){g(l,v)};
+        g.identifyAccount=function(i,v){o='account';v=v||{};v.acctId=i;g(o,v)};
+        g.clearUserCookie=function(d,i){d=n.domain;while(1){n.cookie='fs_uid=;domain='+d+
+        ';path=/;expires='+new Date(0);i=d.indexOf('.');if(i<0)break;d=d.slice(i+1)}}
+      })(window,document,window['_fs_namespace'],'script','user');
+
+      window['_fs_ready'] = function() {
+        _e2e_sessionURL = FS.getCurrentSessionURL();
+        window['_e2e_rec_done'] = true;
+      }
+    }
+    </script>
+    <!-- FULLSTORY SNIPPET END -->
+
+  </head>
+  <body>
+    <div ng-controller="HeaderCtrl">
+      <div class="navbar navbar-static-top" id="top">
+        <div class="navbar-inner">
+          <div class="container">
+            <a ng-init="navCollapsed = true" ng-click="navCollapsed = !navCollapsed" class="btn btn-navbar">
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </a>
+            <a class="brand" href="/" target="_self">PieChopper</a>
+            <div collapse="navCollapsed" class="nav-collapse collapse navbar-responsive-collapse">
+              <ul class="nav pull-right">
+                <li>
+                  <a ng-click="aboutVisible = !aboutVisible; trace.showAbout()" class="clickable">About</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div ng-cloak collapse="!aboutVisible">
+        <div class="container">
+          <div id="about-section" class="dark-section">
+            <p>
+              PieChopper assists startup teams to share their equity fair and square.<br>It's free to use, and its source code is available in <a href="https://github.com/jojanaho/piechopper" target="_blank">GitHub</a> under <a href="https://github.com/jojanaho/piechopper/blob/master/LICENSE" target="_blank">MIT license</a>.
+            </p>
+          </div>
+        </div>
+      </div>
+      
+    </div>
+
+    <div ng-controller="CalcCtrl">
+      <div ng-cloak id="slice-graph" slice-graph
+          show-in-sections="contrib-section;emphasis-section"
+          slices="equities"
+          width="25" height="300"
+          colors="memberColors" style="z-index: 20">
+      </div>
+    </div>
+    
+    <div class="model-section row-fluid" id="overview-section">
+      <div class="container">
+        <div class="row">
+          <div class="offset1 span5"><img class="overview-logo" src="app/img/piechopper_logo.png" alt="PieChopper logo"></div>
+          <div class="span5">
+            <h1>Chop your startup equity</h1>
+            <p class="lead">Slice your founders' pie fairly.<br>Share your proposals.</p>
+            <div class="proceed-actions">
+              <button class="btn btn-large" scroll-to="model-selection-section">Begin</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div ng-controller="ModelSelectionCtrl">
+      <div class="model-section dark-section row-fluid" id="model-selection-section">
+        <div class="container">
+          <h2>How to chop it?</h2>
+          <div class="row span12 model-section-desc">
+            <p>
+              There are various ways to divide the equity. Select the method that is the closest match to your situation and thinking. You may also try out alternative methods, and see how their outcomes differ. In case you don't have any preference, continue to the next section.
+            </p>
+          </div>
+          <div class="model-carousel row span12" ng-cloak>
+            <div class="span6 model-selector">
+              <carousel interval="-1">
+                <slide ng-repeat="s in slides" active="s.active">
+                  <div class="carousel-img">
+                    <img src="app/img/{{ s.image }}" alt="Model image">
+                  </div>
+                  <div class="carousel-caption">
+                    <h4>{{ s.name }}</h4>
+                    <p>{{ s.target }}</p>
+                  </div>
+                </slide>
+              </carousel>
+            </div>
+            <div class="span6">
+              <div class="model-selector-desc" ng-bind-html="activeSlide().desc"></div>
+              <div class="proceed-actions">
+                <button class="btn btn-large" scroll-to="contrib-section">Continue</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+    </div>
+    
+    <div ng-controller="CalcCtrl">
+      <div class="model-section row-fluid" id="contrib-section">
+        <div class="container">
+          <h2>How do you contribute?</h2>
+          <p class="row span12 model-section-desc">
+            Consider each member's contribution below. You may add or remove members (with <i class="fa fa-plus-square action-colored"></i> and <i class="fa fa-minus-square action-colored"></i> buttons) to match your team's headcount. You may also rename members by clicking their name. In case you feel that some rows don't apply in your situation, leave them blank. If you cannot find clear differences between member contributions, it might be a symptom of ill responsibility definition in the company. In that case, use some time to define the role of each member more precisely.
+          </p>
+          <div class="row span12">
+            <table class="table table-striped table-bordered table-hover">
+              <thead>
+                <tr>
+                  <th style="width: 40%">
+                    <div class="cell-wrap">
+                      <span class="member-add-btn" ng-show="!repo.isTeamAtMax()" ng-click="repo.addMember(); trace.addMember()">
+                        <i tooltip="Add new member" class="fa fa-plus-square fa-lg"></i>
+                      </span>
+                    </div>
+                  </th>
+                  <th style="width: {{60 / members().length}}%;" ng-model="member.name" 
+                      ng-repeat="member in members()"
+                      class="cell-centered">
+                    <div class="cell-wrap">
+                      <span contenteditable prevent-empty="true" ng-model="member.name" ng-click="trace.changeMemberName()"></span>
+                      <span class="member-remove-btn" ng-show="!repo.isTeamAtMin()" ng-click="repo.removeMember($index); trace.removeMember()">
+                        <i tooltip="Remove member" class="fa fa-minus-square"></i>
+                      </span>
+                    </div>
+                  </th>
+                </tr>
+              </thead>
+              <tfoot>
+                <tr class="result">
+                  <td></td>
+                  <td class="cell-centered" ng-repeat="member in members()">
+                    <span ng-hide="model().hasInputErrors">{{ member.equity }} %</span>
+                    <span ng-show="model().hasInputErrors">-</span>
+                  </td>
+                </tr>
+              </tfoot>
+              <tbody>
+                <tr ng-class="['even', 'odd'][$index % 2]" 
+                    ng-repeat="id in model().getCriteriaIds()">
+                  <td>
+                    <div class="cell-wrap">
+                      <div class="criteria-txt" ng-style="{ width: criteria(id).info ? '90%' : '100%'}">
+                        {{ criteria(id).text }}
+                      </div>
+                      <div ng-show="{{ criteria(id).info != undefined }}"
+                            class="criteria-info"
+                            tooltip="{{ criteria(id).info }}"
+                            style="width: 10%">
+                        <i class="fa fa-question-circle"></i>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="cell-centered clickable"
+                      value-cell="criteria(id).type"
+                      ng-model="member.values[id]"
+                      radio-unselector="unselectOtherRadios(id, member)"
+                      ng-repeat="member in members()"
+                      ng-class="{ invalid: member.valueErrors[id] }">
+                      <div class="cell-error-msg" ng-show="member.valueErrors[id]">{{ member.valueErrors[id] }}</div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="row span12 proceed-actions">
+            <button class="btn btn-large" scroll-to="model-selection-section">Go Back</button>
+            <button class="btn btn-large" scroll-to="emphasis-section">Continue</button>
+          </div>
+        </div>
+      </div>
+      
+      <div class="model-section dark-section row-fluid" id="emphasis-section">
+        <div class="container">
+          <h2>Want to tweak it?</h2>
+          <p class="row span12 model-section-desc">
+            In this section, you can tweak the selected method to match your team's opinion on fair equity sharing. You may want to adjust the default values due to the market situation in your location, your principles and ethics, or your financial situation. In case you don't have any preference, continue to the next section.
+          </p>
+          <div class="row offset1 span10">
+            <table class="table table-striped table-bordered table-hover">
+              <thead>
+                <tr>
+                  <th style="width: 65%" class="cell-centered">
+                    <div class="th-wrap">What to value?</div>
+                  </th>
+                  <th style="width: 35%" class="cell-centered">
+                    <div class="th-wrap">Value</div>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr ng-class="['even', 'odd'][$index % 2]" 
+                    ng-repeat="id in model().getEmphasisIds()">
+                  <td>{{ model().modelDef.emphasis[id].text }}</td>
+                  <td class="cell-centered clickable"
+                      value-cell="model().modelDef.emphasis[id].type"
+                      ng-model="model().emphasis[id]"
+                      ng-class="{ invalid: model().emphasisErrors[id] }">
+                      <div class="cell-error-msg" ng-show="model().emphasisErrors[id]">{{ model().emphasisErrors[id] }}</div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="row span12 proceed-actions">
+            <button class="btn btn-large" scroll-to="contrib-section">Go Back</button>
+            <button class="btn btn-large" scroll-to="results-section">Continue</button>
+          </div>
+        </div>
+      </div>
+      
+      <div class="model-section row-fluid" id="results-section">
+        <div class="container">
+          <h2>Results</h2>
+          <div ng-hide="model().hasInputErrors">
+            <div class="row span12 model-section-desc">
+              <p>Based on the given data, this is how the "{{ model().modelDef.name }}"-method suggests you to chop your equity.</p>
+            </div>
+            <div class="row span12 no-intendation">
+              <div class="span4" style="padding-bottom: 40px;">
+                <h3>Equity per Member</h3>
+                <ul>
+                  <li ng-repeat="member in members()">
+                    <strong>{{ member.name }}</strong>: {{ member.equity }} %
+                  </li>
+                </ul>
+              </div>
+              <div class="span4" style="padding-bottom: 15px">
+                <h3>The Pie</h3>
+                <piegraph width="250" height="250" slices="equities" colors="memberColors" style="text-align: center"></piegraph>
+              </div>
+              <div class="span4">
+                <h3>Remarks</h3>
+                <ul>
+                  <li ng-if="model().team.messages.length == 0">
+                    No remarks
+                  </li>
+                  <li ng-repeat="message in model().team.messages">
+                    {{ message }}
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div ng-show="model().hasInputErrors">
+            <div class="row span12 model-section-desc">
+              <p>Your input seems to contain errors. Please fix the inputs above, errors are pointed with red color.</p>
+            </div>
+          </div>
+          <div ng-controller="ShareCtrl">
+            <div class="row span12 proceed-actions no-intendation">
+              <button class="btn btn-large" ng-show="!moreResultsWanted" ng-click="showMoreResults(true); trace.wantMoreResults()" scroll-to="questionary-section">More...</button>
+              <button id="share-btn" class="btn btn-large" scroll-to="share-btn" ng-click="saveSnapshot()" ng-disabled="linkToSnapshot()">Share</button>
+            </div>
+            <div id="link-share-url" class="row span12" ng-show="linkToSnapshot()" style="text-align: center"> 
+              <p>
+                The following link can be copied and pasted over IM or email.<br>
+                If you make any changes, they are not saved behind this link (new link must be created).<br>
+                This proposal will be <b><i>saved for a month</i></b>, after which it will be <b><i>deleted.</i></b>
+              </p>
+              <input id="sharedUrl" class="span6" type="text" value="{{ linkToSnapshot() }}"></input>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+    </div>
+  
+    <div ng-controller="QuestionaryCtrl">
+      <div class="model-section dark-section row-fluid" id="questionary-section" ng-show="moreResultsWanted">
+        <div class="container" ng-show="!questionarySent">
+          <h2>Want some more?</h2>
+          <div class="row span12 model-section-desc">
+            <p>Piechopper is currently under development and benefits greatly from your help.
+              Answering the questions below assists in setting the right direction, and it only takes a few seconds.
+              Thank you for your help!</p>
+          </div>
+          <div class="row span12">
+            <div class="span6">
+              <span>Would you like to see some of the following features:</span>
+              <ul>
+                <li>
+                  <span>Get legally binding agreement easily out from the service:</span><br>
+                  <input type="radio" ng-model="questionary.legal" value="yes" /><span>Yes</span>
+                  <input type="radio" ng-model="questionary.legal" value="no"  /><span>No</span>
+                </li>
+                <li>
+                  <span>See vesting as part of the proposal:</span><br>
+                  <input type="radio" ng-model="questionary.vesting" value="yes" /><span>Yes</span>
+                  <input type="radio" ng-model="questionary.vesting" value="no"  /><span>No</span>
+                </li>
+                <li>
+                  <span>Take investment rounds into account:</span><br>
+                  <input type="radio" ng-model="questionary.investement" value="yes" /><span>Yes</span>
+                  <input type="radio" ng-model="questionary.investement" value="no"  /><span>No</span>
+                </li>
+                <li>
+                  <span>Adjust equity periodically (e.g. once per month) based on used effort:</span><br>
+                  <input type="radio" ng-model="questionary.tasks" value="yes" /><span>Yes</span>
+                  <input type="radio" ng-model="questionary.tasks" value="no"  /><span>No</span>
+                </li>
+                <li>
+                  <span>See the difference between multiple proposals:</span><br>
+                  <input type="radio" ng-model="questionary.diff" value="yes" /><span>Yes</span>
+                  <input type="radio" ng-model="questionary.diff" value="no"  /><span>No</span>
+                </li>
+                <li>
+                  <span>Comment your partner's proposal in detail:</span><br>
+                  <input type="radio" ng-model="questionary.comments" value="yes" /><span>Yes</span>
+                  <input type="radio" ng-model="questionary.comments" value="no"  /><span>No</span>
+                </li>
+                <li>
+                  <span>Change the methods without programming:</span><br>
+                  <input type="radio" ng-model="questionary.changeModels" value="yes" /><span>Yes</span>
+                  <input type="radio" ng-model="questionary.changeModels" value="no"  /><span>No</span>
+                </li>
+              </ul>
+            </div>
+            <div class="span6">
+              <p>
+                <span>Would you be willing to pay on some of the features?</span><br>
+                <textarea ng-model="questionary.pay"></textarea>
+              </p>
+              <p>
+                <span>Freeform feedback:</span><br>
+                <textarea ng-model="questionary.feedback"></textarea>
+              </p>
+              <p>
+                <span>Leave your email to get an invite to upcoming features:</span><br>
+                <input type="email" ng-model="questionary.email" placeholder="email@address.com"/>
+              </p>
+            </div>
+          </div>
+          <div class="row span12 proceed-actions">
+            <button class="btn btn-large" ng-click="showMoreResults(false); trace.cancelMoreResults()" scroll-to="results-section">Cancel</button>
+            <button class="btn btn-large" ng-click="sendQuestionary()" scroll-to="questionary-section">Send</button>
+          </div>
+        </div>
+        <div class="container" ng-show="questionarySent" style="text-align: center">
+          <h2>Thank you for your feedback!</h2>
+          <p>Click <a class="clickable" ng-click="questionarySent = false" scroll-to="questionary-section">
+            here</a> if you want to modify the questionary.</p>
+        </div>
+      </div>
+      
+    </div>
+
+    <div id="tos" style="display: none">
+        <ul>
+          <li>The content of the pages of this website is for your general information and use only. It is subject to change without notice.</li>
+          <li>Neither we nor any third parties provide any warranty or guarantee as to the accuracy, timeliness, performance, completeness or suitability of the information and materials found or offered on this website for any particular purpose. You acknowledge that such information and materials may contain inaccuracies or errors, and we expressly exclude liability for any such inaccuracies or errors to the fullest extent permitted by law.</li>
+          <li>Your use of any information or materials on this website is entirely at your own risk, for which we shall not be liable. It shall be your own responsibility to ensure that any products, services or information available through this website meet your specific requirements.</li>
+          <li>From time to time, this website may also include links to other websites. These links are provided for your convenience to provide further information. They do not signify that we endorse the website(s). We have no responsibility for the content of the linked website(s).</li>
+          <li>Your use of this website and any dispute arising out of such use of the website is subject to the laws of Finland.</li>
+          <li>Every effort is made to keep the website up and running smoothly. However, we take no responsibility for, and will not be liable for, the website being temporarily unavailable.</li>
+        </ul>
+    </div>
+    
+    <footer id="footer" class="dark-section">
+      <div class="links pull-right">
+        <a class="clickable" ng-click="showTos()">Terms and Conditions</a>
+        <a scroll-to="top" class="clickable">Back to top</a>
+      </div>
+      <div class="links">
+        <a href="mailto:info@piechopper.com" ng-click="trace.openEmail()">Email</a>
+        <a href="https://twitter.com/piechopper" target="_blank" ng-click="trace.openTwitter()">Twitter</a>
+        <a href="https://github.com/jojanaho/piechopper" target="_blank" ng-click="trace.openGithub()">Github</a>
+      </div>
+    </footer>
+    
+
+    <script src="vendor/js/jquery.js"></script>
+    <script src="vendor/js/angular.js"></script>
+    <script src="vendor/js/angular-ui.js"></script>
+    <script src="vendor/js/ui-bootstrap-tpls.js"></script>
+    <script src="vendor/js/d3.js"></script>
+    <script src="vendor/js/angular-sanitize.min.js"></script>
+    <script src="vendor/js/jquery.reject.min.js"></script>
+    <script src="app/js/app.js?v=2016-08-5--16-46-25"></script>
+    
+  </body>
+</html>

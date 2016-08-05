@@ -1,6 +1,5 @@
 !.gitkeep
 *.sublime-*
-build
 node_modules
 bower_components
 libpeerconnection.log

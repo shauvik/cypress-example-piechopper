@@ -6,7 +6,15 @@ describe("PieChopper", function(){
     // gets reset to a clean state
     //
     // https://on.cypress.io/api/visit
-    cy.visit("http://localhost:8080")
+    cy.visit("/build/served/index.html")
+    // FullStory Script Injection
+    cy.window().invoke("loadRecordingScript", "cypress")
+      .window().its("_e2e_rec_done").should("exist")
+      .window().its("_e2e_sessionURL").then(function(url) {
+          console.log(url);
+          expect(url).to.not.contain('undefined')
+          expect(url).to.contain("cypress")
+      });
   })
 
   // to make assertions throughout our test
