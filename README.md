@@ -1,3 +1,16 @@
+# Sample to demonstrate cypress stubbing flakiness
+
+To run, just clone this repo and run `cypress run`. It's flaky; So, you might need to run more than once.
+
+Eventually one of the "Sharing Results" tests fails and generates a screenshot in `cypress/screenshot`.
+
+Error Message: 
+```
+CypressError: Timed out retrying: cy.wait() timed out waiting 5000ms for the 1st request to the route: 'proposal'. No request ever occured.
+```
+
+
+<hr>
 # PieChopper [![Travis CI](https://travis-ci.org/cypress-io/cypress-example-piechopper.svg?branch=master)](https://travis-ci.org/cypress-io/cypress-example-piechopper) [![Circle CI](https://circleci.com/gh/cypress-io/cypress-example-piechopper.svg?style=svg)](https://circleci.com/gh/cypress-io/cypress-example-piechopper)
 
 ![piechopper-gif](https://cloud.githubusercontent.com/assets/1268976/12985444/ad14159c-d0c0-11e5-8e50-2b64a1d389ac.gif)
